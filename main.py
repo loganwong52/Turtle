@@ -28,48 +28,103 @@ def spiral(r, pen):
         pen.circle(r + i, 45)
 
 
+def concentric_circles(r, pen):
+    # radius of the circle
+    r = 10
+
+    # Loop for printing concentric circles
+    for i in range(50):
+        pen.circle(r * i)
+        pen.up()
+        pen.sety((r * i) * (-1))
+        pen.down()
+
+
+def tangent_circles(r, pen):
+    # r = 10
+    for i in range(r, 150, 2):
+        pen.circle(i)
+
+
+def draw_shapes_inside_shapes(pen, colors):
+    r = 50
+    for s in range(3, 20):
+        i = s - 3
+        if s > len(colors):
+            i = s - (int(s / len(colors)) * len(colors))
+        pen.color(colors[i])
+        pen.circle(r, steps=s)
+        r += 5
+
+
+def filled_in_circle(pen, color, r):
+    pen.fillcolor(color)
+    pen.begin_fill()
+    pen.circle(r)
+    pen.end_fill()
+
+
+def reset_pen(pen):
+    pen.up()
+    pen.setpos(0, 0)
+    pen.down()
+
+
 def main():
     # Create a Turtle screen
     screen = turtle.Screen()
 
     # create a Turtle object
     pen = turtle.Turtle()
-    # pen.tracer(False)
+
+    # hide turtle
+    pen.hideturtle()
 
     # Set the speed of the turtle
-    pen.speed("fastest")
+    # pen.speed("fastest")
+    screen.tracer(False)
 
     # define colors
     colors = ["red", "orange", "yellow", "green", "blue", "purple"]
 
     # draw_2_hexagons(pen, colors)
 
+    pen.up()
+    pen.left(45)
+    pen.backward(400)
+    pen.right(45)
+    pen.down()
+    concentric_circles(10, pen)
+
+    reset_pen(pen)
+
     spiral(10, pen)
+
     pen.up()
     pen.right(45)
-    pen.backward(200)
+    pen.forward(200)
     pen.left(45)
     pen.down()
 
-    r = 10
-    for i in range(r, 150, 2):
-        pen.circle(i)
+    tangent_circles(10, pen)
+
+    reset_pen(pen)
 
     pen.up()
-    pen.right(90)
-    pen.forward(150)
-    pen.left(90)
+    pen.goto(150, 150)
     pen.down()
+    draw_shapes_inside_shapes(pen, colors)
+    pen.color("black")
 
-    for s in range(3, 50):
-        i = s - 3
-        if s > len(colors):
-            i = s - (int(s / len(colors)) * len(colors))
-        pen.color(colors[i])
-        pen.circle(50, steps=s)
+    pen.up()
+    pen.goto(150, -150)
+    pen.down()
+    filled_in_circle(pen, "blue", 40)
 
-    # Close the turtle graphic window on click
-    screen.exitonclick()
+    # Close the turtle graphic window only by using the x button
+    pen.hideturtle()
+    print(pen.isvisible())
+    screen.mainloop()
 
 
 main()
